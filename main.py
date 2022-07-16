@@ -5,7 +5,6 @@ import pygame
 from pygame.locals import *
 
 import ThreeDRenderer
-from ThreeDRenderer.Camera import Camera2
 
 
 def upon_exit():
@@ -38,12 +37,9 @@ def main():
         ThreeDRenderer.Cuboid(-5, -5, 250, 10, 10, 10),
     ]
 
-    my_camera = ThreeDRenderer.Camera(window_size, 60)
-    temp_camera = Camera2(
+    my_camera = ThreeDRenderer.Camera(
         window_size
     )
-
-    use_camera = my_camera
 
     # Main loop
     while True:
@@ -56,11 +52,17 @@ def main():
                     upon_exit()
 
                 if event.key == K_SPACE:
-                    use_camera.move_to((0, 0, 0))
+                    my_camera.move_to((0, 0, 0))
+                    my_camera.change_x_fov_to(math.pi/3)
 
             if event.type == MOUSEMOTION:
                 mouse_diff = (event.pos[0] - mouse_pos[0], event.pos[1] - mouse_pos[1])
                 mouse_pos = event.pos
+
+            if event.type == MOUSEWHEEL:
+                my_camera.change_x_fov_by(
+                    math.pi / 100 * -event.y
+                )
 
         screen.fill((0, 0, 0))
 
@@ -80,17 +82,21 @@ def main():
         if pressed[K_e]:
             movement[1] += 0.5
 
-        use_camera.move(movement)
+        my_camera.move(movement)
 
-        use_camera.position = [round(a, 2) for a in use_camera.position]
+        my_camera.position = [round(a, 2) for a in my_camera.position]
 
         for my_cuboid in my_cuboids:
-            ThreeDRenderer.renderer.cuboid(use_camera, screen, my_cuboid)
+            ThreeDRenderer.renderer.cuboid(my_camera, screen, my_cuboid)
 
-        screen.blit(font.render(f"View from: {use_camera.position}", False, (125, 125, 125)), (0, 0))
-        screen.blit(font.render(f"View {use_camera.view_plane}", False, (125, 125, 125)), (0, 25))
-        screen.blit(font.render(f"Plane center {use_camera.view_plane.point}", False, (125, 125, 125)), (0, 50))
+        screen.blit(font.render(f"View from: {my_camera.position}", False, (125, 125, 125)), (0, 0))
+        screen.blit(font.render(f"View {my_camera.view_plane}", False, (125, 125, 125)), (0, 25))
+        screen.blit(font.render(f"Plane center {my_camera.view_plane.point}", False, (125, 125, 125)), (0, 50))
         screen.blit(font.render(f"{my_cuboids[0].corners[0]}", False, (125, 125, 125)), (0, 75))
+
+        screen.blit(font.render(f"X FOV: {round(my_camera.x_fov, 5)}", False, (125, 125, 125)), (0, 125))
+        screen.blit(font.render(f"X limit: {round(my_camera.x_limit, 5)}", False, (125, 125, 125)), (0, 150))
+        screen.blit(font.render(f"Y limit: {round(my_camera.y_limit, 5)}", False, (125, 125, 125)), (0, 175))
 
         """ABOVE"""
 

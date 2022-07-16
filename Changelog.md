@@ -141,7 +141,23 @@ Very unfinished, but I don't want to delete it, so it shall remain here.
   - Amazing
   
 ## Version 4
-Words
+Found and fixed problems regarding the fov.
 
 ### Camera changes
-Words
+Realised the fov was still being calculated incorrectly.  
+- The problem was the way I was going about it, I think.
+- I was considering sine and cosine to be linear functions (hint, they aren't).
+- So I removed the y fov calculations, leaving the x fov ones.
+- I then used the ratio to calculate the y limit from the x limit.
+  - This seems to work nicely.
+
+I guess I lied in the previous version about there being no bugs.  
+
+Removed the old camera and replaced it with Camera2, now named Camera.  
+- The new camera now has some functions to adjust the fov.
+  - The fov is clamped between pi/100 and 99/100 pi to prevent interesting, but incorrect, things from happening.
+  - As of now only x fov can be used, I may do y fov later.
+
+### "main.py" changes
+- Extra information is now displayed in the pygame window.
+- The scroll wheel is used to change the fov
