@@ -160,4 +160,17 @@ Removed the old camera and replaced it with Camera2, now named Camera.
 
 ### "main.py" changes
 - Extra information is now displayed in the pygame window.
-- The scroll wheel is used to change the fov
+- The scroll wheel is used to change the fov.
+
+### Ideas of things to add or improve
+- Camera rotation please future me.
+
+### Bugs and things to fix
+- There shouldn't be any.
+  - I think.
+
+## Version 5
+Words.  
+
+### Things
+Words.  
