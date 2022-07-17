@@ -172,5 +172,33 @@ Removed the old camera and replaced it with Camera2, now named Camera.
 ## Version 5
 Words.  
 
+
+### Camera changes
+- Made the fov calculations be independent of the camera position and rotation.
+  - This is fine because everything will be converted into 2D coordinates.
+    - I know what I mean.
+- Added some doc strings because I got bored with looking at the code to see what things do.
+  - I don't know how necessary some of these are, but ehh.
+- Small changes to some functions to remove any loops.
+  - This should make things a little faster, although as of right now, speed isn't an issue.
+- Small changes to some lines to make them more readable.
+- Added in functions to rotate the camera to the left and right, yaw.
+
+### "main.py" changes
+- Added some comments to allow for easier reading.
+- Left and right arrow keys to change camera rotation, right control to reset.
+- Added a display of the controls to the pygame window.
+
+### renderer -> "cuboid.py" changes
+- Removed some useless code that would prevent lines from being drawn if both points were not on the screen.
+  - This code was commented out, I deleted the comment.
+  - The idea was to make things faster, again, speed isn't an issue right now.
+  - And I completely forgot that the line could gr through the screen even if both points are not on it.
+
+### Images folder changes
+- Renamed to "WorkingOut", as it contains my working out of problems.
+- Changes to the names of the things inside to contain the date of creation.
+  - Done because I like organisation.
+
 ### Things
 Words.  

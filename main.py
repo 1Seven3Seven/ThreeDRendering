@@ -51,9 +51,11 @@ def main():
                 if event.key == K_ESCAPE:
                     upon_exit()
 
-                if event.key == K_SPACE:
+                if event.key == K_SPACE:  # Reset position
                     my_camera.move_to((0, 0, 0))
-                    my_camera.change_x_fov_to(math.pi/3)
+
+                if event.key == K_RCTRL:  # Reset rotation
+                    my_camera.rotate_to(0)
 
             if event.type == MOUSEMOTION:
                 mouse_diff = (event.pos[0] - mouse_pos[0], event.pos[1] - mouse_pos[1])
@@ -64,11 +66,16 @@ def main():
                     math.pi / 100 * -event.y
                 )
 
+            if event.type == MOUSEBUTTONDOWN:  # Reset fov
+                if event.button == 2:
+                    my_camera.change_x_fov_to((math.pi/3))
+
         screen.fill((0, 0, 0))
 
         """BELOW"""
-        movement = [0, 0, 0]
         pressed = pygame.key.get_pressed()
+        # Movement along axis
+        movement = [0, 0, 0]
         if pressed[K_d]:
             movement[0] += 0.5
         if pressed[K_a]:
@@ -81,14 +88,23 @@ def main():
             movement[1] -= 0.5
         if pressed[K_e]:
             movement[1] += 0.5
-
         my_camera.move(movement)
+        # Camera rotation
+        rotation = 0
+        if pressed[K_LEFT]:
+            rotation -= math.pi / 100
+        if pressed[K_RIGHT]:
+            rotation += math.pi / 100
+        my_camera.rotate(rotation)
 
+        # Rounding position to get rid of annoying floating point rounding errors
         my_camera.position = [round(a, 2) for a in my_camera.position]
 
+        # Rendering the cuboids
         for my_cuboid in my_cuboids:
             ThreeDRenderer.renderer.cuboid(my_camera, screen, my_cuboid)
 
+        # Useful information
         screen.blit(font.render(f"View from: {my_camera.position}", False, (125, 125, 125)), (0, 0))
         screen.blit(font.render(f"View {my_camera.view_plane}", False, (125, 125, 125)), (0, 25))
         screen.blit(font.render(f"Plane center {my_camera.view_plane.point}", False, (125, 125, 125)), (0, 50))
@@ -97,6 +113,14 @@ def main():
         screen.blit(font.render(f"X FOV: {round(my_camera.x_fov, 5)}", False, (125, 125, 125)), (0, 125))
         screen.blit(font.render(f"X limit: {round(my_camera.x_limit, 5)}", False, (125, 125, 125)), (0, 150))
         screen.blit(font.render(f"Y limit: {round(my_camera.y_limit, 5)}", False, (125, 125, 125)), (0, 175))
+
+        # Current controls
+        screen.blit(font.render(f"Movement: w, a, s, d, e, q", False, (125, 125, 125)), (950, 0))
+        screen.blit(font.render(f"Reset position: space", False, (125, 125, 125)), (950, 25))
+        screen.blit(font.render(f"Fov change: scroll wheel", False, (125, 125, 125)), (950, 50))
+        screen.blit(font.render(f"Reset fov: middle mouse down", False, (125, 125, 125)), (950, 75))
+        screen.blit(font.render(f"Rotation: left, right arrows", False, (125, 125, 125)), (950, 100))
+        screen.blit(font.render(f"Reset rotation: right control", False, (125, 125, 125)), (950, 125))
 
         """ABOVE"""
 

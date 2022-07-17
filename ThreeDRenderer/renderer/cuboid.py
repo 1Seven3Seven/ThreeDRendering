@@ -17,6 +17,9 @@ def cuboid(camera: Camera, surface: pygame.Surface, cuboid_: Cuboid):
         # Save it
         points_on_view_plane.append(point)
 
+    # Convert the points from 3D space to 2D space
+    ...
+
     # Convert the points to what will be drawn on the screen
     window_x_size, window_y_size = surface.get_size()
     x_scale = window_x_size / (2 * camera.x_limit)
@@ -38,14 +41,4 @@ def cuboid(camera: Camera, surface: pygame.Surface, cuboid_: Cuboid):
 
     # Draw the connections
     for i, j, in cuboid_.corner_connections:
-        """
-        # Check if both points are on the screen
-        if (
-            0 < draw_points[i][0] < window_x_size and 0 < draw_points[i][1] < window_y_size
-        ) or (
-            0 < draw_points[j][0] < window_x_size and 0 < draw_points[j][1] < window_y_size
-        ):
-            # If they are then draw them
-            pygame.draw.line(surface, (255, 255, 255), draw_points[i], draw_points[j], 1)
-        """
         pygame.draw.line(surface, (255, 255, 255), draw_points[i], draw_points[j], 1)
